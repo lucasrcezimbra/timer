@@ -5,67 +5,62 @@ from timer import FriendlyDuration
 
 def test_init():
     days, hours, minutes, seconds = 12, 10, 56, 8
-    duration = FriendlyDuration(days, hours, minutes, seconds)
+    milliseconds, microseconds, nanoseconds = 19, 96, 21
+
+    duration = FriendlyDuration(
+        days, hours, minutes, seconds, milliseconds, microseconds, nanoseconds
+    )
 
     assert duration.days == days
     assert duration.hours == hours
     assert duration.minutes == minutes
     assert duration.seconds == seconds
+    assert duration.milliseconds == milliseconds
+    assert duration.microseconds == microseconds
+    assert duration.nanoseconds == nanoseconds
 
 
-class TestFromSeconds:
-    def test_one_second(self):
-        duration = FriendlyDuration.from_seconds(1)
+class TestFromNanoseconds:
+    def test_one_nanosecond(self):
+        duration = FriendlyDuration.from_nanoseconds(1)
         assert duration.days == 0
         assert duration.hours == 0
         assert duration.minutes == 0
-        assert duration.seconds == 1
+        assert duration.seconds == 0
+        assert duration.milliseconds == 0
+        assert duration.microseconds == 0
+        assert duration.nanoseconds == 1
 
-    def test_one_second_and_a_half(self):
-        duration = FriendlyDuration.from_seconds(1.5)
+    def test_one_nanosecond_and_a_half(self):
+        duration = FriendlyDuration.from_nanoseconds(1.5)
         assert duration.days == 0
         assert duration.hours == 0
         assert duration.minutes == 0
-        assert duration.seconds == 1.5
+        assert duration.seconds == 0
+        assert duration.milliseconds == 0
+        assert duration.microseconds == 0
+        assert duration.nanoseconds == 1.5
 
-    def test_one_minute_and_one_second(self):
-        seconds = FriendlyDuration.MINUTE_IN_SECONDS + 1.5
-
-        duration = FriendlyDuration.from_seconds(seconds)
-
-        assert duration.days == 0
-        assert duration.hours == 0
-        assert duration.minutes == 1
-        assert duration.seconds == 1.5
-
-    def test_one_hour_one_minute_and_one_second(self):
+    def test_one_all(self):
         seconds = (
-            FriendlyDuration.HOUR_IN_SECONDS
-            + FriendlyDuration.MINUTE_IN_SECONDS
-            + 1.5
+            FriendlyDuration.DAY_IN_NANOSECONDS
+            + FriendlyDuration.HOUR_IN_NANOSECONDS
+            + FriendlyDuration.MINUTE_IN_NANOSECONDS
+            + FriendlyDuration.SECOND_IN_NANOSECONDS
+            + FriendlyDuration.MILlISECOND_IN_NANOSECONDS
+            + FriendlyDuration.MICROSECOND_IN_NANOSECONDS
+            + 1
         )
 
-        duration = FriendlyDuration.from_seconds(seconds)
-
-        assert duration.days == 0
-        assert duration.hours == 1
-        assert duration.minutes == 1
-        assert duration.seconds == 1.5
-
-    def test_one_day_one_hour_one_minute_and_one_second(self):
-        seconds = (
-            FriendlyDuration.DAY_IN_SECONDS
-            + FriendlyDuration.HOUR_IN_SECONDS
-            + FriendlyDuration.MINUTE_IN_SECONDS
-            + 1.5
-        )
-
-        duration = FriendlyDuration.from_seconds(seconds)
+        duration = FriendlyDuration.from_nanoseconds(seconds)
 
         assert duration.days == 1
         assert duration.hours == 1
         assert duration.minutes == 1
-        assert duration.seconds == 1.5
+        assert duration.seconds == 1
+        assert duration.milliseconds == 1
+        assert duration.microseconds == 1
+        assert duration.nanoseconds == 1
 
 
 def test_str():
@@ -80,6 +75,12 @@ def test_str():
     assert str(FriendlyDuration(2, 0, 0, 0)) == '2 days'
 
     assert str(FriendlyDuration(1, 1, 1, 1)) == '1 day, 1 hour, 1 minute, 1 second'
+    assert str(FriendlyDuration(1, 1, 1, 1, 1, 1, 1)) == (
+        '1 day, 1 hour, 1 minute, 1 second, 1 millisecond, 1 microsecond, 1 nanosecond'
+    )
+    assert str(FriendlyDuration(2, 2, 2, 2, 2, 2, 2)) == (
+        '2 days, 2 hours, 2 minutes, 2 seconds, 2 milliseconds, 2 microseconds, 2 nanoseconds'
+    )
 
 
 def test_timer():
