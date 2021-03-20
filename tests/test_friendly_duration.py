@@ -5,62 +5,62 @@ from timer import FriendlyDuration
 
 def test_init():
     days, hours, minutes, seconds = 12, 10, 56, 8
-    milliseconds, microseconds, nanoseconds = 19, 96, 21
+    milli, micro, nano = 19, 96, 21
 
     duration = FriendlyDuration(
-        days, hours, minutes, seconds, milliseconds, microseconds, nanoseconds
+        days, hours, minutes, seconds, milli, micro, nano
     )
 
     assert duration.days == days
     assert duration.hours == hours
     assert duration.minutes == minutes
     assert duration.seconds == seconds
-    assert duration.milliseconds == milliseconds
-    assert duration.microseconds == microseconds
-    assert duration.nanoseconds == nanoseconds
+    assert duration.milli == milli
+    assert duration.micro == micro
+    assert duration.nano == nano
 
 
 class TestFromNanoseconds:
     def test_one_nanosecond(self):
-        duration = FriendlyDuration.from_nanoseconds(1)
+        duration = FriendlyDuration.from_nano(1)
         assert duration.days == 0
         assert duration.hours == 0
         assert duration.minutes == 0
         assert duration.seconds == 0
-        assert duration.milliseconds == 0
-        assert duration.microseconds == 0
-        assert duration.nanoseconds == 1
+        assert duration.milli == 0
+        assert duration.micro == 0
+        assert duration.nano == 1
 
     def test_one_nanosecond_and_a_half(self):
-        duration = FriendlyDuration.from_nanoseconds(1.5)
+        duration = FriendlyDuration.from_nano(1.5)
         assert duration.days == 0
         assert duration.hours == 0
         assert duration.minutes == 0
         assert duration.seconds == 0
-        assert duration.milliseconds == 0
-        assert duration.microseconds == 0
-        assert duration.nanoseconds == 1.5
+        assert duration.milli == 0
+        assert duration.micro == 0
+        assert duration.nano == 1.5
 
     def test_one_all(self):
         seconds = (
-            FriendlyDuration.DAY_IN_NANOSECONDS
-            + FriendlyDuration.HOUR_IN_NANOSECONDS
-            + FriendlyDuration.MINUTE_IN_NANOSECONDS
-            + FriendlyDuration.SECOND_IN_NANOSECONDS
-            + FriendlyDuration.MILlISECOND_IN_NANOSECONDS
-            + FriendlyDuration.MICROSECOND_IN_NANOSECONDS
+            FriendlyDuration.DAY_IN_NANO
+            + FriendlyDuration.HOUR_IN_NANO
+            + FriendlyDuration.MINUTE_IN_NANO
+            + FriendlyDuration.SECOND_IN_NANO
+            + FriendlyDuration.MILLI_IN_NANO
+            + FriendlyDuration.MICRO_IN_NANO
             + 1
         )
 
-        duration = FriendlyDuration.from_nanoseconds(seconds)
+        duration = FriendlyDuration.from_nano(seconds)
 
         assert duration.days == 1
         assert duration.hours == 1
         assert duration.minutes == 1
         assert duration.seconds == 1
-        assert duration.milliseconds == 1
-        assert duration.microseconds == 1
-        assert duration.nanoseconds == 1
+        assert duration.milli == 1
+        assert duration.micro == 1
+        assert duration.nano == 1
 
 
 def test_str():
